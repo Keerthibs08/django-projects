@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  {% if messages %}
+  {% for message in messages %}
+      <div class="alert alert-info" role="alert">
+        {{ message }}
+        <button type = "button" class="close" data-dismiss = "alert" aria-label = "close">
+          <span aria-hidden = "true">&times;</span>
+        </button>
+      </div>
+  {% endfor %}
+  {% endif %}
+    <form method="POST">
+      {% csrf_token %}
+        <div class="form-group">
+          <input type="text" class="form-control" name="task" placeholder = "New task?">
+        </div>   
+        <button type="submit" class="btn btn-primary">Add Task</button>
+
+        </form>
+    <table class="table">
+        <thead>
+          <tr>
+            <th>Task List</th>
+            <th>Done</th>
+            <th>Edit</th>
+            <th>Delete</th>
+
+          </tr>
+        </thead>
+        <tbody>
+        {% if all_task %}
+        {% for i in all_task %}
+        {% if i.done %} 
+          <tr class="success">
+            <td>{{i.id}}|{{i.task}}</td>
+            <td><a href= "{% url 'pending_task' i.id %} ">Mark this to Pending</a></td>
+            <td><a href= "{% url 'edit_task' i.id %} ">Edit</a></td>
+            <td><a href= "{% url 'delete_task' i.id %} ">Delete</a></td>
+          </tr>
+       {% else %}
+       <tr>
+        <td>{{i.id}}|{{i.task}}</td>
+        <td><a href= "{% url 'complete_task' i.id %} ">Mark this to Completed</a></td>
+        <td><a href= "{% url 'edit_task' i.id %} ">Edit</a></td>
+        <td><a href= "{% url 'delete_task' i.id %} ">Delete</a></td>
+      </tr>
+       {% endif %}
+    {% endfor %}
+    {% endif %}
+</tbody>
+</table>
+</div>
+{% endblock content %}
+
